@@ -1,0 +1,101 @@
+.dropzoneTextStyle {
+  text-align: center;
+  top: 35%;
+  position: relative;
+}
+
+.uploadIconSize {
+  width: 51px !important;
+  height: 51px !important;
+  color: #909090 !important;
+}
+
+.dropzoneParagraph {
+  font-size: 24px;
+  margin: 0;
+}
+
+.dropZone {
+  display: flex;
+  margin: 32px;
+  position: relative;
+  min-height: 500px;
+  border: dashed;
+  border-color: #C8C8C8;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+}
+
+.row {
+  margin-right: -0.5rem;
+  margin-left: -0.5rem;
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex: 0 1 auto;
+  -webkit-box-flex: 0;
+  -ms-flex: 0 1 auto;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.stripes {
+  cursor: pointer;
+  border: solid;
+  border-color: #C8C8C8;
+  background-image: repeating-linear-gradient(-45deg, #F0F0F0, #F0F0F0 25px, #C8C8C8 25px, #C8C8C8 50px);
+  -webkit-animation: progress 2s linear infinite !important;
+  -moz-animation: progress 2s linear infinite !important;
+  animation: progress 2s linear infinite !important;
+  background-size: 150% 100%;
+}
+
+.rejectStripes {
+  cursor: pointer;
+  border: solid;
+  border-color: #C8C8C8;
+  background-image: repeating-linear-gradient(-45deg, #fc8785, #fc8785 25px, #f4231f 25px, #f4231f 50px);
+  -webkit-animation: progress 2s linear infinite !important;
+  -moz-animation: progress 2s linear infinite !important;
+  animation: progress 2s linear infinite !important;
+  background-size: 150% 100%;
+}
+
+.deleteIconSize {
+  padding: 12px;
+  color: #909090 !important;
+}
+
+.dropList {
+  width: 60%;
+}
+
+.dropListItem {
+  padding: 20px !important;
+}
+
+.thumbnailProgress {
+  background-color: #C8C8C8;
+  padding-bottom: 10px !important;
+  padding-top: 10px !important;
+  text-align: center;
+  width: 120px !important;
+}
+
+.uploadItem {
+  height: 100;
+  width: 500;
+  margin: 20 auto;
+  display: inline-block;
+}
+
+.uploadProgress {
+  width: 60%;
+  background-color:
+}
