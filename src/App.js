@@ -21,7 +21,7 @@ class App extends Component {
   }
 
   componentWillMount() {
-    var uploadScreen = [<UploadDropZone appContext={this}/>];
+    var uploadScreen = [<UploadDropZone key="udz" appContext={this}/>];
     this.setState({uploadScreen: uploadScreen})
   }
 

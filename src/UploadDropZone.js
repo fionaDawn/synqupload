@@ -5,20 +5,12 @@ import RaisedButton from 'material-ui/RaisedButton';
 import CloudUploadIcon from 'material-ui/svg-icons/file/cloud-download';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 
-import {blue500, grey400, darkBlack} from 'material-ui/styles/colors';
 import CircularProgress from 'material-ui/CircularProgress';
 import LinearProgress from 'material-ui/LinearProgress';
 
-import {
-  Card,
-  CardActions,
-  CardHeader,
-  CardMedia,
-  CardTitle,
-  CardText
-} from 'material-ui/Card';
+import {Card, CardText} from 'material-ui/Card';
 
-var apiBaseUrl = "http://localhost:4000/api/";
+// var apiBaseUrl = "http://localhost:4000/api/";
 /* Module:superagent
 superagent is used to handle post/get requests to server */
 // var request = require('superagent');
@@ -69,13 +61,10 @@ class UploadDropZone extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      status: STATUS.UPLOADING,
-      filesPreview: [],
-      filesToBeSent: [],
-      draweropen: false,
-      printcount: 5,
+      status: STATUS.UPLOAD,
+      filesToUpload: [],
+      maxFiles: 2,
       printingmessage: '',
-      printButtonDisabled: false,
       acceptedFiles: this.props.acceptedFiles || ['video/*'],
       completed: 0
     }
@@ -84,31 +73,15 @@ class UploadDropZone extends Component {
   Function:onDrop
   Parameters: acceptedFiles, rejectedFiles
   Usage:This fxn is default event handler of react drop-Dropzone
-  which is modified to update filesPreview div
   */
   onDrop(acceptedFiles, rejectedFiles) {
-    // console.log('Accepted files: ', acceptedFiles[0].name);
-    this.setState({status: STATUS.UPLOADING});
-    // var filesToBeSent = this.state.filesToBeSent;
-    // if (filesToBeSent.length < this.state.printcount) {
-    //   filesToBeSent.push(acceptedFiles);
-    //   var filesPreview = [];
-    //   for (var i in filesToBeSent) {
-    //     filesPreview.push(<div>
-    //       {filesToBeSent[i][0].name}
-    //       <a href="#">
-    //         <FontIcon className="material-icons customstyle" color={blue500} styles={{
-    //             top: 10
-    //           }} onClick={(event) => this.handleCloseClick(event, i)}>clear</FontIcon>
-    //       </a>
-    //     </div>)
-    //   }
-    //   this.setState({filesToBeSent, filesPreview});
-    // } else {
-    //   alert("You have reached the limit of printing files at a time")
-    // }
-
-    // console.log('Rejected files: ', rejectedFiles);
+    var filesToUpload = this.state.filesToUpload;
+    if (filesToUpload.length < this.state.maxFiles) {
+      filesToUpload.push(acceptedFiles);
+      this.setState({filesToUpload, status: STATUS.UPLOADING});
+    } else {
+      alert("You have reached the maximum number of videos allowed to be uploaded.")
+    }
   }
 
   progress(completed) {
@@ -122,39 +95,27 @@ class UploadDropZone extends Component {
 
   renderUploading() {
     this.timer = setTimeout(() => this.progress(5), 1000);
-    return (<Dropzone disableClick={true} className={'dropZone'} accept={this.state.acceptedFiles.join(',')} acceptClassName={'stripes'} rejectClassName={'rejectStripes'}>
+    var filesToUpload = this.state.filesToUpload;
+    return (<Dropzone disableClick={true} onDrop={(files) => this.onDrop(files)} className={'dropZone'} accept={this.state.acceptedFiles.join(',')} acceptClassName={'stripes'} rejectClassName={'rejectStripes'}>
       <div>
-        <Card style={styles.uploadItem}>
-          <CardText style={styles.uploadContent}>
-            <CircularProgress style={styles.thumbnail} size={40}/>
-            <div style={styles.bufferContent}>
-              <LinearProgress style={styles.uploadProgress} mode="determinate" value={this.state.completed}/>
-              <div>
-                <p>
-                  Your video is still uploading. Please keep this page open until it's done.
-                </p>
-                <RaisedButton primary={true} label="Delete" icon={<DeleteIcon/>}/>
-              </div>
-            </div>
+        {
+          filesToUpload.map((value, idx) => (<Card key='{value[0].name}_{idx}' style={styles.uploadItem}>
+            <CardText style={styles.uploadContent}>
+              <CircularProgress style={styles.thumbnail} size={40}/>
+              <div style={styles.bufferContent}>
+                <LinearProgress style={styles.uploadProgress} mode="determinate" value={this.state.completed}/>
+                <div>
+                  <p>Your video {value[0].name}
+                    is still uploading. Please keep this page open until it's done.</p>
 
-          </CardText>
-        </Card>
-        <Card style={styles.uploadItem}>
-          <CardText style={styles.uploadContent}>
-            <CircularProgress style={styles.thumbnail} size={40}/>
-            <div style={styles.bufferContent}>
-              <LinearProgress style={styles.uploadProgress} mode="determinate" value={this.state.completed}/>
-              <div>
-                <p>
-                  Your video is still uploading. Please keep this page open until it's done.
-                </p>
-                <RaisedButton primary={true} label="Delete" icon={<DeleteIcon/>}/>
+                  <RaisedButton primary={true} label="Delete" icon={<DeleteIcon/>}/>
+                </div>
               </div>
-            </div>
 
-          </CardText>
-        </Card>
-      </div>
+            </CardText>
+          </Card>))
+        }
+        </div>
     </Dropzone>);
   }
 
@@ -170,44 +131,10 @@ class UploadDropZone extends Component {
 
   render() {
     const {status} = this.state;
-    if (status === STATUS.UPLOAD)
+    if (status === STATUS.UPLOAD) 
       return this.renderUpload();
-    else if (status === STATUS.UPLOADING)
+    else if (status === STATUS.UPLOADING) 
       return this.renderUploading();
-
-      // let filesToBeSent = this.state.filesToBeSent;
-      // let style = {
-      //   addFileBtn: {
-      //     'marginTop': '15px'
-      //   }
-      // };
-      //     return (<div className="App">
-      //       <div>
-      //         <AppBar title="Synq Upload" showMenuIconButton={false}/>
-      //       </div>
-      //       <div>
-      //         <center>
-      //           <br/>
-      //           <br/>
-      //           <div className="row">
-      //             {
-      //               this.state.filesPreview.length
-      //                 ? <span>Preview:</span>
-      //                 : ''
-      //             }
-      //           </div>
-      //           <div className="row">
-      //             {this.state.printingmessage}
-      //           </div>
-      //           <RaisedButton disabled={this.state.printButtonDisabled} label="Upload Files" primary={true} style={style} onClick={(event) => this.handleClick(event)}/>
-      //
-      //         </center>
-      //       </div>
-      //     </div>);
-      //   }
     }
-  // const style = {
-  //   margin: 15
-  // };
-}
+  }
 export default UploadDropZone;
