@@ -77,6 +77,8 @@ class UploadDropZone extends Component {
   onDrop(acceptedFiles, rejectedFiles) {
     var filesToUpload = this.state.filesToUpload;
     if (filesToUpload.length < this.state.maxFiles) {
+
+      this.timer = setTimeout(() => this.progress(5), 1000);
       filesToUpload.push(acceptedFiles);
       this.setState({filesToUpload, status: STATUS.UPLOADING});
     } else {
@@ -85,16 +87,16 @@ class UploadDropZone extends Component {
   }
 
   progress(completed) {
-    // if (completed > 100) {
-    this.setState({completed: 100});
-    // } else {
-    //   this.setState({completed});
-    //   this.timer = setTimeout(() => this.progress(completed + 10), 1000);
-    // }
+    if (completed > 100) {
+      clearTimeout(this.timer);
+      this.setState({completed: 100});
+    } else {
+      this.setState({completed});
+      this.timer = setTimeout(() => this.progress(completed + 10), 1000);
+    }
   }
 
   renderUploading() {
-    this.timer = setTimeout(() => this.progress(5), 1000);
     var filesToUpload = this.state.filesToUpload;
     return (<Dropzone disableClick={true} onDrop={(files) => this.onDrop(files)} className={'dropZone'} accept={this.state.acceptedFiles.join(',')} acceptClassName={'stripes'} rejectClassName={'rejectStripes'}>
       <div>
